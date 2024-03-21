@@ -1,6 +1,14 @@
 import java.util.*;
 import java.io.*;
 
+/*
+ * 풀이 시간
+ * - 3시간 40분
+ * 
+ * 틀린 이유
+ *  1. 충돌로 튕겨나간 산타 좌표 업데이트 빠트림
+ *  2. 조기 종료 후 점수를 출력하지 않음
+ * */
 public class Main {
 
     static int N, M, P, C, D;
@@ -41,12 +49,8 @@ public class Main {
     private static void solve() {
         // M턴 반복
         for (int i = 0; i < M; i++) {
-//             System.out.println("turn: " + (i + 1));
-//             printMap();
             // 루돌프 로직
             playDeer(i);
-//             System.out.printf("deer: (%d, %d)\n", deer[0], deer[1]);
-//             System.out.println();
             if (!canPlay) {
                 break;
             }
@@ -59,37 +63,16 @@ public class Main {
                 
             }
 
-//             printMap();
-
             // 산타 점수 획득
             for (int j = 1; j <= P; j++) {
                 if (santas[j].inRange) {
                     santas[j].score++;
                 }
             }
-            
-//            for (int j = 1; j <= P; j++) {
-//            	System.out.printf("santa no: %d x: %d y: %d score: %d\n", j, santas[j].x, santas[j].y, santas[j].score);
-//            }
         }
         
         // 정답 출력
         printAnswer();
-    }
-
-    private static void printMap() {
-        for (int i = 1; i <= N; i++) {
-            for (int j = 1; j <= N; j++) {
-            	if (deer[0] == i && deer[1] == j) {
-            		System.out.printf("%d ", -1);
-            	} else {
-            		System.out.printf("%d ", map[i][j]);     		
-            	}
-       
-            }
-            System.out.println();
-        }
-        System.out.println();
     }
 
     private static void playDeer(int turn) {
@@ -111,7 +94,6 @@ public class Main {
                 continue;
             }
             int dist = (int) (Math.pow((deer[0] - santa.x), 2) + Math.pow((deer[1] - santa.y), 2));
-//            System.out.printf("target: %d %d %d\n", santa.x, santa.y, dist);
             if (dist < minDist) {
                 minDist = dist;
                 target = santa;
@@ -122,14 +104,12 @@ public class Main {
                 }
             }
         }
-
-//        System.out.printf("real target: %d %d %d\n", target.x, target.y, minDist);
+        
         return target;
     }
 
     private static void moveDeer(int turn, Santa target) {
         // 8 방향 중 가장 가까워지는 곳으로 이동
-        // System.out.printf("target: (%d, %d)\n", target.x, target.y);
         int minDist = Integer.MAX_VALUE;
         int nx = 0;
         int ny = 0;
@@ -139,13 +119,11 @@ public class Main {
             int x = deer[0] + dx[i];
             int y = deer[1] + dy[i];
             int dist = (int) (Math.pow((x - target.x), 2) + Math.pow((y - target.y), 2));
-            // System.out.printf("dir: %d, dist: %d\n", i, dist);
             if (dist < minDist) {
                 minDist = dist;
                 dir = i;
                 nx = x;
                 ny = y;
-                // System.out.printf("dir: %d, minDist: %d\n", i, dist);
             }
         }
 
@@ -154,8 +132,6 @@ public class Main {
 
         // 산타가 존재하면 충돌
         if (map[nx][ny] > 0) {
-            // System.out.println("no: " + map[nx][ny]);
-            // System.out.println("x: " + santas[map[nx][ny]].x + "y: " + santas[map[nx][ny]].y);
             collide(turn, map[nx][ny], dir, C);
         }
     }
@@ -219,11 +195,6 @@ public class Main {
             int nx = santa.x + dx[i];
             int ny = santa.y + dy[i];
             int nDist = (int) (Math.pow((deer[0] - nx), 2) + Math.pow((deer[1] - ny), 2));
-            
-//            if (santaIdx == 2) {
-//            	System.out.printf("deer: %d %d\n", deer[0], deer[1]);
-//            	System.out.printf("nx: %d ny: %d nDist: %d\n", nx, ny, nDist);
-//            }
             if (nx < 1 || nx > N || ny < 1 || ny > N) {
                 continue;
             }
