@@ -48,7 +48,7 @@ public class Main {
 //             System.out.printf("deer: (%d, %d)\n", deer[0], deer[1]);
 //             System.out.println();
             if (!canPlay) {
-                return;
+                break;
             }
 
             // 산타 로직
