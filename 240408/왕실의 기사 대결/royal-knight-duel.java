@@ -171,10 +171,10 @@ public class Main {
 				for (int j = 0; j < w; j++) {
 					int nx = r + i + dx[dir];
 					int ny = c + j + dy[dir];
-					int idx = knightMap[nx][ny];
 					if (isOutOfRange(nx, ny)) {
 						return null;
 					}
+					int idx = knightMap[nx][ny];
 					if (idx == 0 || visited[idx]) {
 						continue;
 					}
