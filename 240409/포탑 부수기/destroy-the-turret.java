@@ -146,7 +146,7 @@ public class Main {
 							px %= N;
 						}
 						if (py < 0) {
-							py = M + ny;
+							py = M + py;
 						}
 						if (py >= M) {
 							py %= M;
@@ -162,6 +162,9 @@ public class Main {
 
 		// 포탑 공격
 		defender.damage -= attacker.damage;
+		if (defender.damage <= 0) {
+			candidates.remove(defender);
+		}
 		for (int i = 0; i < 8; i++) {
 			int nx = defender.x + dx[i];
 			int ny = defender.y + dy[i];
@@ -180,11 +183,11 @@ public class Main {
 			if (map[nx][ny] == attacker) {
 				continue;
 			}
-			if ((map[nx][ny].damage - (attacker.damage / 2)) <= 0) {
-				candidates.remove(map[nx][ny]);
-			}
 			map[nx][ny].damage -= (attacker.damage / 2);
 			map[nx][ny].repair = false;
+			if (map[nx][ny].damage <= 0) {
+				candidates.remove(map[nx][ny]);
+			}
 		}
 	}
 
