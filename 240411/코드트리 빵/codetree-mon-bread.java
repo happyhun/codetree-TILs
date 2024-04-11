@@ -85,25 +85,37 @@ public class Main {
 	}
 
 	private static void movePerson(int[] person, int[] store) {
-		// 최단경로 찾기 (상점에서 사람을 거꾸로 탐색하는 기법)
+		// 최단경로 찾기
+		int[][][] prev = new int[N + 1][N + 1][2];
 		boolean[][] visited = new boolean[N + 1][N + 1];
 		Queue<int[]> queue = new ArrayDeque<>();
 
-		queue.add(store);
-		visited[store[0]][store[1]] = true;
+		queue.add(person);
+		visited[person[0]][person[1]] = true;
 
 		while (!queue.isEmpty()) {
 			int[] curr = queue.poll();
 
-			for (int i = 3; i >= 0; i--) {
+			for (int i = 0; i < 4; i++) {
 				int nx = curr[0] + dx[i];
 				int ny = curr[1] + dy[i];
 				if (nx < 1 || nx > N || ny < 1 || ny > N || visited[nx][ny]) {
 					continue;
 				}
-				if (nx == person[0] && ny == person[1]) {
-					person[0] = curr[0];
-					person[1] = curr[1];
+				if (nx == store[0] && ny == store[1]) {
+					// 최단경로 역추적
+					int x = nx;
+					int y = ny;
+					int px = curr[0];
+					int py = curr[1];
+					while (!(px == person[0] && py == person[1])) {
+						x = px;
+						y = py;
+						px = prev[px][py][0];
+						py = prev[px][py][1];
+					}
+					person[0] = x;
+					person[1] = y;
 					return;
 				}
 				if (map[nx][ny] == -1) {
@@ -111,6 +123,7 @@ public class Main {
 				}
 				queue.add(new int[] { nx, ny });
 				visited[nx][ny] = true;
+				prev[nx][ny] = curr;
 			}
 		}
 	}
