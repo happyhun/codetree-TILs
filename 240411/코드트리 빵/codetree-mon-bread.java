@@ -129,6 +129,7 @@ public class Main {
 	}
 
 	private static int[] findCamp(int[] store) {
+		List<int[]> candidates = new ArrayList<>();
 		boolean[][] visited = new boolean[N + 1][N + 1];
 		Queue<int[]> queue = new ArrayDeque<>();
 
@@ -136,20 +137,35 @@ public class Main {
 		visited[store[0]][store[1]] = true;
 
 		while (!queue.isEmpty()) {
-			int[] curr = queue.poll();
+			if (!candidates.isEmpty()) {
+				Collections.sort(candidates, (o1, o2) -> {
+					if (o1[0] == o2[0]) {
+						return o1[1] - o2[1];
+					}
+					return o1[0] - o2[0];
+				});
 
-			for (int i = 0; i < 4; i++) {
-				int nx = curr[0] + dx[i];
-				int ny = curr[1] + dy[i];
-				if (nx < 1 || nx > N || ny < 1 || ny > N || visited[nx][ny] || map[nx][ny] == -1) {
-					continue;
+				int[] camp = candidates.get(0);
+				map[camp[0]][camp[1]] = -1;
+				return camp;
+			}
+
+			int size = queue.size();
+			for (int k = 0; k < size; k++) {
+				int[] curr = queue.poll();
+
+				for (int i = 0; i < 4; i++) {
+					int nx = curr[0] + dx[i];
+					int ny = curr[1] + dy[i];
+					if (nx < 1 || nx > N || ny < 1 || ny > N || visited[nx][ny] || map[nx][ny] == -1) {
+						continue;
+					}
+					if (map[nx][ny] == 1) {
+						candidates.add(new int[] { nx, ny });
+					}
+					queue.add(new int[] { nx, ny });
+					visited[nx][ny] = true;
 				}
-				if (map[nx][ny] == 1) {
-					map[nx][ny] = -1;
-					return new int[] { nx, ny };
-				}
-				queue.add(new int[] { nx, ny });
-				visited[nx][ny] = true;
 			}
 		}
 
