@@ -111,8 +111,8 @@ public class Main {
 					while (!(px == person[0] && py == person[1])) {
 						x = px;
 						y = py;
-						px = prev[px][py][0];
-						py = prev[px][py][1];
+						px = prev[x][y][0];
+						py = prev[x][y][1];
 					}
 					person[0] = x;
 					person[1] = y;
